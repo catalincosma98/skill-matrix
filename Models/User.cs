@@ -9,8 +9,8 @@
         public string Password { get; set; }
         public string ProfilePicture { get; set; }
         public string Position { get; set; }
-        public Department Department { get; set; }
-        public List<Team> Teams { get; set; }
+        public Department? Department { get; set; }
+        public List<Team>? Teams { get; set; }
         public List<UserLanguage> Languages { get; set; }
         public List<UserSkill> Skills { get; set; }
         public bool IsAdmin { get; set; }

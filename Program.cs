@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add the In-Memory Databases
-builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("Languages"));
+builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("MockDB"));
+
 
 
 var app = builder.Build();
