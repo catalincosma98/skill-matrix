@@ -10,6 +10,7 @@ namespace SkillMatrix.Database
         public DbSet<SkillCategory> SkillCategories { get; set; } = null!;
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<UserSkill> UserSkills { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
 
         public ApplicationContext(DbContextOptions options) : base(options)
