@@ -3,10 +3,13 @@
     public class UserSkill
     {
         public long Id { get; set; }
-        public Skill Skill { get; set; }
-        public int Level { get; set; }
+        public Skill? Skill { get; set; }
+        public int? Level { get; set; }
 
-        public UserSkill(long id, Skill skill, int level)
+        public UserSkill()
+        {
+        }
+        public UserSkill(long id, Skill? skill, int? level)
         {
             Id = id;
             Skill = skill;
