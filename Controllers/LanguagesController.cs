@@ -16,22 +16,19 @@ namespace SkillMatrix.Controllers
         {
             _context = context;
         }
-
-        // GET: https://localhost:7179/api/languages/custom
-        [HttpGet("custom")]
+        
+        // Get all
+        // GET: https://localhost:7179/api/languages/all
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Language>>> GetLanguages()
         {
             return await _context.Languages.ToListAsync();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Language>>> GetLanguagesCustom()
-        {
-            return await _context.Languages.ToListAsync();
-        }
 
-        // GET: api/Languages/5
-        [HttpGet("{id}")]
+        // Get by Id
+        // GET: https://localhost:7179/api/languages/getById/{id}
+        [HttpGet("getById/{id}")]
         public async Task<ActionResult<Language>> GetLanguage(long id)
         {
             var language = await _context.Languages.FindAsync(id);
@@ -44,9 +41,9 @@ namespace SkillMatrix.Controllers
             return language;
         }
 
-        // PUT: api/Languages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        // Update
+        // PUT: https://localhost:7179/api/languages/update/{id}
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> PutLanguage(long id, Language language)
         {
             if (id != language.Id)
@@ -75,9 +72,9 @@ namespace SkillMatrix.Controllers
             return NoContent();
         }
 
-        // POST: api/Languages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        // Insert
+        // POST: https://localhost:7179/api/languages/insert
+        [HttpPost("insert")]
         public async Task<ActionResult<Language>> PostLanguage(Language language)
         {
             _context.Languages.Add(language);
@@ -87,8 +84,8 @@ namespace SkillMatrix.Controllers
         }
 
 
-        // DELETE: api/Languages/5
-        [HttpDelete("{id}")]
+        // DELETE: https://localhost:7179/api/languages/delete/{id}
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteLanguage(long id)
         {
             var language = await _context.Languages.FindAsync(id);
