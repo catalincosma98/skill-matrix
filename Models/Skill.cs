@@ -6,13 +6,13 @@
 
         public string Name { get; set; }
 
-        public SkillCategory skillCategory;
+        public SkillCategory SkillCategory { get; set; }
 
         public Skill(long id, string name, SkillCategory skillCategory)
         {
             Id = id;
             Name = name;
-            this.skillCategory = skillCategory;
+            SkillCategory = skillCategory;
         }
     }
 }
