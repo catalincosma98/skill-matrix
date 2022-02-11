@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillMatrix.Models;
+using SkillMatrix.Database;
 
 namespace SkillMatrix.Controllers
 {

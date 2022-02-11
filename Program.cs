@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SkillMatrix.Models;
+using SkillMatrix.Database;
 
 
 var builder = WebApplication.CreateBuilder(args);

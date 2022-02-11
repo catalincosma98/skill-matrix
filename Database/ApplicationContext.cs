@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SkillMatrix.Models;
 
-namespace SkillMatrix.Models
+namespace SkillMatrix.Database
 {
     public class    ApplicationContext : DbContext
     {
@@ -9,7 +10,6 @@ namespace SkillMatrix.Models
         public ApplicationContext(DbContextOptions options) : base(options)
         {
         }
-
 
     }
 }
