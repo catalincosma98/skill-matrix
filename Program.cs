@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<LanguageContext>(opt => opt.UseInMemoryDatabase("Languages"));
+// Add the In-Memory Databases
+builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("Languages"));
 
 
 var app = builder.Build();

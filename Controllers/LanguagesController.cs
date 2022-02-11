@@ -10,9 +10,9 @@ namespace SkillMatrix.Controllers
     [ApiController]
     public class LanguagesController : ControllerBase
     {
-        private readonly LanguageContext _context;
+        private readonly ApplicationContext _context;
 
-        public LanguagesController(LanguageContext context)
+        public LanguagesController(ApplicationContext context)
         {
             _context = context;
         }
@@ -24,7 +24,6 @@ namespace SkillMatrix.Controllers
         {
             return await _context.Languages.ToListAsync();
         }
-
 
         // Get by Id
         // GET: https://localhost:7179/api/languages/getById/{id}
@@ -39,6 +38,17 @@ namespace SkillMatrix.Controllers
             }
 
             return language;
+        }
+
+        // Insert
+        // POST: https://localhost:7179/api/languages/insert
+        [HttpPost("insert")]
+        public async Task<ActionResult<Language>> PostLanguage(Language language)
+        {
+            _context.Languages.Add(language);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetLanguage), new { id = language.Id }, language);
         }
 
         // Update
@@ -71,18 +81,6 @@ namespace SkillMatrix.Controllers
 
             return NoContent();
         }
-
-        // Insert
-        // POST: https://localhost:7179/api/languages/insert
-        [HttpPost("insert")]
-        public async Task<ActionResult<Language>> PostLanguage(Language language)
-        {
-            _context.Languages.Add(language);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetLanguage), new { id = language.Id }, language);
-        }
-
 
         // DELETE: https://localhost:7179/api/languages/delete/{id}
         [HttpDelete("delete/{id}")]
