@@ -13,6 +13,8 @@ namespace SkillMatrix.Database
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<UserSkill> UserSkills { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<Team> Teams { get; set; } = null!;
 
     }
 }

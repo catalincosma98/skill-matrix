@@ -9,9 +9,6 @@ var allowedOrigins = "_allowedOrigins";
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Add the In-Memory Databases
-builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("MockDB"));
-
 // Add the SQL server database connection 
 builder.Services.AddDbContext<DataContext>(options =>
 {
