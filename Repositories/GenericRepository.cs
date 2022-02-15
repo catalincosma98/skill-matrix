@@ -13,25 +13,51 @@ namespace SkillMatrix.Repositories
         {
             DataContext = dataContext;
         }
-        public List<T> FindAll()
+
+        public async Task<List<T>> FindAll()
         {
-            return DataContext.Set<T>().AsNoTracking().ToList();
+            return await DataContext.Set<T>().AsNoTracking().ToListAsync();
         }
-        public List<T> FindByCondition(Expression<Func<T, bool>> expression)
+
+        public async Task<T?> FindById(long id)
         {
-            return DataContext.Set<T>().Where(expression).AsNoTracking().ToList();
+            var entity = await DataContext.Set<T>().FindAsync(id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity;
         }
-        public void Create(T entity)
+
+        public async Task<T> Create(T entity)
         {
             DataContext.Set<T>().Add(entity);
+            await DataContext.SaveChangesAsync();
+            return entity;
         }
-        public void Update(T entity)
+
+        public async Task<T> Update(T entity)
         {
-            DataContext.Set<T>().Update(entity);
+            DataContext.Entry(entity).State = EntityState.Modified;
+            await DataContext.SaveChangesAsync();
+            return entity;
         }
-        public void Delete(T entity)
+
+        public async Task<T?> Delete(long id)
         {
+            var entity = await DataContext.Set<T>().FindAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
             DataContext.Set<T>().Remove(entity);
+            await DataContext.SaveChangesAsync();
+
+            return entity;
         }
+
     }
 }

@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SkillMatrix.Database;
-
+using SkillMatrix.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var allowedOrigins = "_allowedOrigins";
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -15,7 +15,12 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Register the repositories to the dependeny injection system
+builder.Services.AddScoped<SkillRepository>();
+
 // Enable CORS
+var allowedOrigins = "_allowedOrigins";
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowedOrigins,
@@ -26,7 +31,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
         });
 });
-
 
 var app = builder.Build();
 

@@ -4,10 +4,10 @@ namespace SkillMatrix.Interfaces
 {
     public interface IGenericRepository<T>
     {
-        List<T> FindAll();
-        List<T> FindByCondition(Expression<Func<T, bool>> expression);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<List<T>> FindAll();
+        Task<T?> FindById(long id);
+        Task<T> Create(T entity);
+        Task<T> Update(T entity);
+        Task<T?> Delete(long id); 
     }
 }
