@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillMatrix.Models;
-using SkillMatrix.Database;
+using SkillMatrix.Interfaces;
+using SkillMatrix.Repositories;
 
 namespace SkillMatrix.Controllers
 {
@@ -11,11 +12,20 @@ namespace SkillMatrix.Controllers
     [ApiController]
     public class UserSkillsController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IUserSkillRepository UserSkillRepository;
 
-        public UserSkillsController(DataContext context)
+        public UserSkillsController(UserSkillRepository userSkillRepository)
         {
-            _context = context;
+            UserSkillRepository = userSkillRepository;
+        }
+
+        // Get all
+        // GET: https://localhost:7179/api/userskills/eagerall
+        [HttpGet("eagerall")]
+        public async Task<ActionResult<IEnumerable<UserSkill>>> EagerGetUserSkills()
+        {
+            string[] children = {"Skill"};
+            return await UserSkillRepository.EagerFindAll(children);
         }
 
         // Get all
@@ -23,7 +33,7 @@ namespace SkillMatrix.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<UserSkill>>> GetUserSkills()
         {
-            return await _context.UserSkills.ToListAsync();
+            return await UserSkillRepository.FindAll();
         }
 
         // Get by Id
@@ -31,7 +41,7 @@ namespace SkillMatrix.Controllers
         [HttpGet("getById/{id}")]
         public async Task<ActionResult<UserSkill>> GetUserSkill(long id)
         {
-            var userSkill = await _context.UserSkills.FindAsync(id);
+            var userSkill = await UserSkillRepository.FindById(id);
 
             if (userSkill == null)
             {
@@ -44,13 +54,12 @@ namespace SkillMatrix.Controllers
         // Insert
         // POST: https://localhost:7179/api/userskills/insert
         [HttpPost("insert")]
-        public async Task<ActionResult<UserSkill>> PostUserSkill(UserSkill userSkill)
+        public async Task<ActionResult<Skill>> PostUserSkill(UserSkill userSkill)
         {
-            _context.UserSkills.Add(userSkill);
-            await _context.SaveChangesAsync();
-
+            await UserSkillRepository.Create(userSkill);
             return CreatedAtAction(nameof(GetUserSkill), new { id = userSkill.Id }, userSkill);
         }
+
 
         // Update
         // PUT: https://localhost:7179/api/userskills/update/{id}
@@ -62,15 +71,14 @@ namespace SkillMatrix.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(userSkill).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await UserSkillRepository.Update(userSkill);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserSkillExists(id))
+                var userSkillEntry = await UserSkillRepository.FindById(id);
+                if (userSkillEntry == null)
                 {
                     return NotFound();
                 }
@@ -87,21 +95,15 @@ namespace SkillMatrix.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUserSkill(long id)
         {
-            var userSkill = await _context.UserSkills.FindAsync(id);
+            var userSkill = await UserSkillRepository.FindById(id);
             if (userSkill == null)
             {
                 return NotFound();
             }
 
-            _context.UserSkills.Remove(userSkill);
-            await _context.SaveChangesAsync();
+            await UserSkillRepository.Delete(id);
 
             return NoContent();
-        }
-
-        private bool UserSkillExists(long id)
-        {
-            return _context.UserSkills.Any(e => e.Id == id);
         }
     }
 }

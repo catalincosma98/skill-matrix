@@ -4,8 +4,6 @@ using SkillMatrix.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -17,6 +15,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 // Register the repositories to the dependeny injection system
 builder.Services.AddScoped<SkillRepository>();
+builder.Services.AddScoped<UserSkillRepository>();
 
 // Enable CORS
 var allowedOrigins = "_allowedOrigins";
@@ -26,7 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: allowedOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins("http://localhost:7179")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
