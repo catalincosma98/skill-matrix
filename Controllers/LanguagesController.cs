@@ -11,9 +11,9 @@ namespace SkillMatrix.Controllers
     [ApiController]
     public class LanguagesController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly DataContext _context;
 
-        public LanguagesController(ApplicationContext context)
+        public LanguagesController(DataContext context)
         {
             _context = context;
         }

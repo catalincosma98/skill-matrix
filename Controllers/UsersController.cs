@@ -1,8 +1,9 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkillMatrix.Interfaces;
 using SkillMatrix.Models;
-using SkillMatrix.Database;
+using SkillMatrix.Repositories;
 
 namespace SkillMatrix.Controllers
 {
@@ -11,11 +12,20 @@ namespace SkillMatrix.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly IUserRepository UserRepository;
 
-        public UsersController(ApplicationContext context)
+        public UsersController(UserRepository userRepository)
         {
-            _context = context;
+            UserRepository = userRepository;
+        }
+
+        // Get all
+        // GET: https://localhost:7179/api/users/eagerall
+        [HttpGet("eagerall")]
+        public async Task<ActionResult<IEnumerable<User>>> EagerGetUsers()
+        {
+            string[] children = { "Department", "Teams", "Languages", "Skills" };
+            return await UserRepository.EagerFindAll(children);
         }
 
         // Get all
@@ -23,7 +33,7 @@ namespace SkillMatrix.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await UserRepository.FindAll();
         }
 
         // Get by Id
@@ -31,7 +41,7 @@ namespace SkillMatrix.Controllers
         [HttpGet("getById/{id}")]
         public async Task<ActionResult<User>> GetUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await UserRepository.FindById(id);
 
             if (user == null)
             {
@@ -46,11 +56,10 @@ namespace SkillMatrix.Controllers
         [HttpPost("insert")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
+            await UserRepository.Create(user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
+
 
         // Update
         // PUT: https://localhost:7179/api/users/update/{id}
@@ -62,15 +71,14 @@ namespace SkillMatrix.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await UserRepository.Update(user);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                var userEntry = await UserRepository.FindById(id);
+                if (userEntry == null)
                 {
                     return NotFound();
                 }
@@ -87,21 +95,15 @@ namespace SkillMatrix.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await UserRepository.FindById(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await UserRepository.Delete(id);
 
             return NoContent();
-        }
-
-        private bool UserExists(long id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

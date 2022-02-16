@@ -11,9 +11,9 @@ namespace SkillMatrix.Controllers
     [ApiController]
     public class SkillCategoriesController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private readonly DataContext _context;
 
-        public SkillCategoriesController(ApplicationContext context)
+        public SkillCategoriesController(DataContext context)
         {
             _context = context;
         }
