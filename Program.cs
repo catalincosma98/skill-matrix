@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Register the repositories to the dependeny injection system
 builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<UserSkillRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 // Enable CORS
 var allowedOrigins = "_allowedOrigins";
