@@ -54,7 +54,7 @@ namespace SkillMatrix.Controllers
         // Insert
         // POST: https://localhost:7179/api/userskills/insert
         [HttpPost("insert")]
-        public async Task<ActionResult<Skill>> PostUserSkill(UserSkill userSkill)
+        public async Task<ActionResult<UserSkill>> PostUserSkill(UserSkill userSkill)
         {
             await UserSkillRepository.Create(userSkill);
             return CreatedAtAction(nameof(GetUserSkill), new { id = userSkill.Id }, userSkill);
